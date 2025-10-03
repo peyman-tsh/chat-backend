@@ -4,6 +4,7 @@ import { User, UserDocument } from "./user.schema";
 import { Model } from "mongoose";
 import { IUser } from "./interfaces/IUser";
 import { CreateUserDto } from "./dtos/create.user.dto";
+import { UpdateUserDto } from "./dtos/update.user.dto";
 
 
 export class UserService implements IUser{
@@ -29,18 +30,19 @@ export class UserService implements IUser{
         }
         return user
     }
-    async updateUser(id: string, user: CreateUserDto): Promise<User> {
+    async updateUser(id: string, user: UpdateUserDto): Promise<User> {
         const updatedUser = await this.userModel.findByIdAndUpdate(id, user, {new:true});
         if(!updatedUser){
             throw new NotFoundException('User not found');
         }
         return updatedUser
     }
-    async deleteUser(id: string): Promise<void> {
+    async deleteUser(id: string): Promise<string> {
         const deletedUser = await this.userModel.findByIdAndDelete(id);
         if(!deletedUser){
             throw new NotFoundException('User not found');
         }
+        return "ok"
     }
     async findAllUsers(): Promise<User[]> {
         const users = await this.userModel.find();
