@@ -13,7 +13,7 @@ export class UserService implements IUser{
     ) {}
     async createUser(user: CreateUserDto): Promise<User> {
         const newUser = new this.userModel(user);
-        newUser.save();
+        await newUser.save();
         return newUser;
     }
     async  findUserByEmail(email: string): Promise<User> {

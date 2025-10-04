@@ -1,56 +1,31 @@
-import { IsString, IsEmail, IsPhoneNumber, IsOptional } from 'class-validator';
-import { ApiProperty, ApiSchema } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
 
-@ApiSchema({ name: 'UpdateUserRequest' })
 export class UpdateUserDto {
+  @ApiProperty({ example: 'John', description: 'User first name', required: false })
+  @IsOptional()
+  @IsString()
+  name?: string;
 
-    @ApiProperty({
-        description:'user id',
-        example:''
-    })
+  @ApiProperty({ example: 'Doe', description: 'User last name', required: false, minLength: 4 })
+  @IsOptional()
+  @IsString()
+  @MinLength(4)
+  lastName?: string;
 
-    @ApiProperty({ 
-        description: 'name of the user', 
-        example: 'John', 
-        required: false 
-    })
-    @IsString({ message: 'name must be a string' })
-    @IsOptional()
-    name?: string;
+  @ApiProperty({ example: 'john.doe@example.com', description: 'User email address', required: false })
+  @IsOptional()
+  @IsEmail()
+  email?: string;
 
-    @ApiProperty({ 
-        description: 'lastName of the user', 
-        example: 'Doe', 
-        required: false 
-    })
-    @IsString({ message: 'lastName must be a string' })
-    @IsOptional()
-    lastName?: string;
+  @ApiProperty({ example: '09123456789', description: 'User phone number', required: false, minLength: 11 })
+  @IsOptional()
+  @IsString()
+  @MinLength(11)
+  phoneNumber?: string;
 
-    @ApiProperty({ 
-        description: 'email of the user', 
-        example: 'john.doe@example.com', 
-        required: false 
-    })
-    @IsEmail({}, { message: 'email must be a valid email' })
-    @IsOptional()
-    email?: string;
-
-    @ApiProperty({ 
-        description: 'phoneNumber of the user', 
-        example: '09123456789', 
-        required: false 
-    })
-    @IsPhoneNumber('IR', { message: 'phoneNumber must be a valid phone number' })
-    @IsOptional()
-    phoneNumber?: string;
-
-    @ApiProperty({ 
-        description: 'role of the user', 
-        example: 'admin', 
-        required: false 
-    })
-    @IsString({ message: 'role must be a string' })
-    @IsOptional()
-    role?: string;
+  @ApiProperty({ example: 'user', description: 'User role', required: false, enum: ['admin', 'user'] })
+  @IsOptional()
+  @IsString()
+  role?: string;
 }

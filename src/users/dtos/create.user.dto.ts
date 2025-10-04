@@ -1,29 +1,31 @@
-import { IsString, IsEmail, IsPhoneNumber, IsNotEmpty } from 'class-validator';
-import { ApiProperty, ApiSchema } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 
-
-@ApiSchema({ name: 'CreateCatRequest' })
 export class CreateUserDto {
-    @ApiProperty({description:'name of the user',example:'John'})
-    @IsString({message:'name must be a string'})
-    @IsNotEmpty({message:'name is required'})
-    name:string;
+  @ApiProperty({ example: 'John', description: 'User first name', required: true })
+  @IsNotEmpty()
+  @IsString()
+  name: string;
 
-    @ApiProperty({description:'lastName of the user',example:'Doe'})
-    @IsString({message:'lastName must be a string'})
-    @IsNotEmpty({message:'lastName is required'})
-    lastName:string;
+  @ApiProperty({ example: 'Doe', description: 'User last name', required: true, minLength: 4 })
+  @IsNotEmpty()
+  @IsString()
+  @MinLength(4)
+  lastName: string;
 
-    @ApiProperty({description:'email of the user',example:'john.doe@example.com'})
-    @IsEmail({},{message:'email must be a valid email'})
-    @IsNotEmpty({message:'email is required'})
-    email:string;
+  @ApiProperty({ example: 'john.doe@example.com', description: 'User email address', required: true })
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
 
-    @ApiProperty({description:'phoneNumber of the user',example:'09123456789'})
-    @IsPhoneNumber('IR',{message:'phoneNumber must be a valid phone number'})
-    phoneNumber:string;
+  @ApiProperty({ example: '09123456789', description: 'User phone number', required: true, minLength: 11 })
+  @IsNotEmpty()
+  @IsString()
+  @MinLength(11)
+  phoneNumber: string;
 
-    @ApiProperty({description:'role of the user',example:'admin'})
-    @IsString({message:'role must be a string'})
-    role:string;
-};
+  @ApiProperty({ example: 'user', description: 'User role', required: false, enum: ['admin', 'user'] })
+  @IsOptional()
+  @IsString()
+  role?: string;
+}
