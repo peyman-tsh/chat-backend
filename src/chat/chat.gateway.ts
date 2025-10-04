@@ -9,7 +9,7 @@ import {
     MessageBody
   } from '@nestjs/websockets';
   import { Server, Socket } from 'socket.io';
-  import { RedisService } from 'src/redis/redis.service';
+  import { RedisService } from '../redis/redis.service';
   import { ChatService } from './chat.service';
 import { CreateChatDto } from './dto/create.chat.dto';
   
