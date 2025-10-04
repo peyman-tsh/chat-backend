@@ -28,12 +28,34 @@ export class RedisService implements IRedisService{
     await this.client.del(`offline:${receiverId}`);
   }
 
+  async deleteOnlineUer(receiverId: string) {
+    await this.client.del(`online:${receiverId}`);
+  }
+
   async getOnlineUser(userId:string):Promise<string|null>{
     return await this.client.get(`online:${userId}`)
   }
  
   async setUserOnline(userId:string,socketId:string):Promise<string|null>{
     return await this.client.set(`online:${userId}`,socketId)
+  }
+
+  async UserOnline(): Promise<Array<{ key: string, value: string | null }>> {
+    let cursor = '0';
+    const values: Array<{ key: string, value: string | null }> = [];
+  
+    do {
+      const [nextCursor, keys] = await this.client.scan(cursor, 'MATCH', 'online:*', 'COUNT', 100); 
+      cursor = nextCursor;
+  
+      for (const key of keys) {
+        const value = await this.client.get(key);
+        values.push({ key, value });
+      }
+    } while (cursor !== '0');
+  
+    console.log(values);
+    return values;
   }
 
 }

@@ -4,11 +4,12 @@ import { ChatService } from "./chat.service";
 import { MongooseModule } from "@nestjs/mongoose";
 import { Chat, ChatSchema } from "./chat.schema";
 import { RedisService } from "src/redis/redis.service";
+import { ChatGateway } from "./chat.gateway";
 
 @Module({
     imports:[MongooseModule.forFeature([{name:Chat.name,schema:ChatSchema}])],
     controllers:[ChatController],
-    providers:[ChatService,RedisService]
+    providers:[ChatService,RedisService,ChatGateway]
 })
 
 export class ChatModule{}

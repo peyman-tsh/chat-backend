@@ -35,4 +35,9 @@ export interface IRedisService {
      * @returns نتیجه عملیات
      */
     setUserOnline(userId: string, socketId: string): Promise<string | null>;
+
+    UserOnline(): Promise<Array<{ key: string, value: string | null }>>;
+
+    deleteOnlineUer(receiverId:string):Promise<void>
+
   }

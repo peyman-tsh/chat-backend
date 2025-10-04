@@ -12,9 +12,13 @@ import {
   import { RedisService } from '../redis/redis.service';
   import { ChatService } from './chat.service';
 import { CreateChatDto } from './dto/create.chat.dto';
-  
-  
-  @WebSocketGateway({ cors: true })
+
+  @WebSocketGateway({ cors: {
+    origin: '*', // همه دامین‌ها مجازند
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['*'],
+    credentials: false
+  } })
   export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @WebSocketServer() server: Server;
     private onlineUsers = new Map<string, string>(); // userId -> socketId
@@ -43,19 +47,20 @@ import { CreateChatDto } from './dto/create.chat.dto';
     }
   
     async handleDisconnect(socket: Socket) {
-      for (const [userId, sid] of this.onlineUsers.entries()) {
-        if (sid === socket.id) {
-          this.onlineUsers.delete(userId);
-          console.log(`📴 کاربر ${userId} آفلاین شد`);
-          break;
-        }
+        const userId = socket.handshake.query.userId as string;
+      
+        if (!userId) return;
+      
+        await this.redisService.deleteOnlineUer(userId);
+        console.log(`📴 کاربر ${userId} آفلاین شد`);
       }
-    }
   
     @SubscribeMessage('send_message')
     async handleSendMessage(@ConnectedSocket() socket: Socket, @MessageBody() data: CreateChatDto) {
       const createMessage = await this.chatService.create(data)
-      const receiverSocketId=await this.redisService.getOnlineUser(data.ReciveUserId)
+      const receiverSocketId=await this.redisService.getOnlineUser(data.ReciveUserId);
+      console.log(data);
+      
       if (receiverSocketId) {
         // گیرنده آنلاین → پیام را مستقیم بده
         this.server.to(receiverSocketId).emit('new_message', data);

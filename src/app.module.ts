@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import {ThrottlerModule} from "@nestjs/throttler";
@@ -9,6 +9,9 @@ import { CacheableMemory } from 'cacheable';
 import config from './config/config';
 import { UserModule } from './users/user.module';
 import { ChatModule } from './chat/chat.module';
+import { RateLimitMiddleware } from './rateLimit/middlware/rate.limit.middlware';
+import { RateLimitModule } from './rateLimit/rate.limit.module';
+import { RateLimitService } from './rateLimit/rate.limit.service';
 
 @Module({
   imports: [ConfigModule.forRoot({isGlobal:true}),
@@ -43,9 +46,16 @@ import { ChatModule } from './chat/chat.module';
       }
     ]),
     UserModule,
-    ChatModule
+    ChatModule,
+    RateLimitModule
   ],
   controllers: [],
-  providers: [],
+  providers: [RateLimitService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(RateLimitMiddleware)
+      .forRoutes('cats');
+  }
+}
