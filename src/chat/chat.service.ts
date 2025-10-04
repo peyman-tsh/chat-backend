@@ -9,12 +9,12 @@ import { UpdateChatDto } from './dto/update.chat.dto';
 @Injectable()
 export class ChatService {
   constructor(
-    @InjectModel(Chat.name) private readonly chatModel: Model<ChatDocument>,
+    @InjectModel(Chat.name) private readonly chatModel: Model<Chat>,
   ) {}
 
   async create(createChatDto: CreateChatDto): Promise<Chat> {
-    const createdChat = new this.chatModel(createChatDto);
-    return createdChat.save();
+    const createdChat = await this.chatModel.create(createChatDto);
+    return await createdChat.save();
   }
 
   async findAll(): Promise<Chat[]> {
