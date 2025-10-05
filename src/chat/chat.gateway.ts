@@ -12,6 +12,8 @@ import {
   import { RedisService } from '../redis/redis.service';
   import { ChatService } from './chat.service';
 import { CreateChatDto } from './dto/create.chat.dto';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
 
   @WebSocketGateway({ cors: {
     origin: '*', // همه دامین‌ها مجازند
@@ -21,9 +23,10 @@ import { CreateChatDto } from './dto/create.chat.dto';
   } })
   export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @WebSocketServer() server: Server;
-    private onlineUsers = new Map<string, string>(); // userId -> socketId
   
-    constructor(private redisService: RedisService,private readonly chatService:ChatService) {}
+    constructor(private redisService: RedisService,private readonly chatService:ChatService,
+      @InjectQueue('sendNotif') private readonly queue: Queue
+    ) {}
   
     async handleConnection(socket: Socket) {
       const userId = socket.handshake.query.userId as string;
@@ -48,9 +51,9 @@ import { CreateChatDto } from './dto/create.chat.dto';
   
     async handleDisconnect(socket: Socket) {
         const userId = socket.handshake.query.userId as string;
-      
+        await this.queue.add('sendNotifalert',userId)
         if (!userId) return;
-      
+        
         await this.redisService.deleteOnlineUser(userId);
         console.log(`📴 کاربر ${userId} آفلاین شد`);
       }

@@ -12,6 +12,7 @@ import { ChatModule } from './chat/chat.module';
 import { RateLimitMiddleware } from './rateLimit/middlware/rate.limit.middlware';
 import { RateLimitModule } from './rateLimit/rate.limit.module';
 import { RateLimitService } from './rateLimit/rate.limit.service';
+import { BullModule } from '@nestjs/bullmq';
 
 @Module({
   imports: [ConfigModule.forRoot({isGlobal:true}),
@@ -47,7 +48,13 @@ import { RateLimitService } from './rateLimit/rate.limit.service';
     ]),
     UserModule,
     ChatModule,
-    RateLimitModule
+    RateLimitModule,
+    BullModule.forRoot({
+      connection:{
+        host:config().database.bullmq,
+        port:config().database.redis_Port
+      }
+    })
   ],
   controllers: [],
   providers: [RateLimitService],
