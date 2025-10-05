@@ -38,6 +38,6 @@ export interface IRedisService {
 
     UserOnline(): Promise<Array<{ key: string, value: string | null }>>;
 
-    deleteOnlineUer(receiverId:string):Promise<void>
+    deleteOnlineUser(receiverId:string):Promise<void>
 
   }

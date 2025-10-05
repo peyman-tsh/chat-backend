@@ -28,7 +28,7 @@ export class RedisService implements IRedisService{
     await this.client.del(`offline:${receiverId}`);
   }
 
-  async deleteOnlineUer(receiverId: string) {
+  async deleteOnlineUser(receiverId: string) {
     await this.client.del(`online:${receiverId}`);
   }
 

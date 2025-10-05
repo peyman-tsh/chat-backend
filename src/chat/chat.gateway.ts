@@ -51,7 +51,7 @@ import { CreateChatDto } from './dto/create.chat.dto';
       
         if (!userId) return;
       
-        await this.redisService.deleteOnlineUer(userId);
+        await this.redisService.deleteOnlineUser(userId);
         console.log(`📴 کاربر ${userId} آفلاین شد`);
       }
   

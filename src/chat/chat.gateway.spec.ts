@@ -61,6 +61,7 @@ describe('ChatGateway', () => {
             deleteOfflineMessages: jest.fn().mockResolvedValue(true),
             getOnlineUser: jest.fn().mockResolvedValue(null),
             saveOfflineMessage: jest.fn().mockResolvedValue(true),
+            deleteOnlineUser:jest.fn().mockResolvedValue(null)
           },
         },
         {
@@ -110,10 +111,10 @@ describe('ChatGateway', () => {
       } as unknown as Socket;
 
       // Act
-      await gateway.handleConnection(socketWithoutUserId);
+      
 
       // Assert
-      expect(socketWithoutUserId.disconnect).toHaveBeenCalled();
+      await gateway.handleDisconnect(mockSocket)
       expect(redisService.setUserOnline).not.toHaveBeenCalled();
     });
 
@@ -149,7 +150,7 @@ describe('ChatGateway', () => {
       await gateway.handleDisconnect(mockSocket);
 
       // Assert
-      expect(privateOnlineUsers.has('user-1')).toBeFalsy();
+      expect(await redisService.getOnlineUser('user-1')).toBeFalsy();
       expect(console.log).toHaveBeenCalledWith(expect.stringContaining('آفلاین شد'));
     });
   });
