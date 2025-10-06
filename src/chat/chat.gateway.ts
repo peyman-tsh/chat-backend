@@ -37,6 +37,8 @@ import { Queue } from 'bullmq';
       }
   
       await this.redisService.setUserOnline(userId, socket.id);
+      console.log(socket.id);
+      
       console.log(`✅ کاربر ${userId} آنلاین شد`);
   
       // وقتی وصل شد پیام‌های آفلاین رو بهش بده

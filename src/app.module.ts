@@ -49,12 +49,6 @@ import { BullModule } from '@nestjs/bullmq';
     UserModule,
     ChatModule,
     RateLimitModule,
-    BullModule.forRoot({
-      connection:{
-        host:config().database.bullmq,
-        port:config().database.redis_Port
-      }
-    })
   ],
   controllers: [],
   providers: [RateLimitService],

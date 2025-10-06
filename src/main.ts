@@ -3,6 +3,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as Cors from 'cors'
 import { AppModule } from './app.module';
 import helmet from 'helmet';
+import { MongooseExceptionFilter } from './common/excption.filter';
 
 
 
@@ -20,6 +21,7 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, documentFactory);
   app.use(helmet());
   app.enableCors()
+  app.useGlobalFilters(new MongooseExceptionFilter())
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

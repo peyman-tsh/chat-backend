@@ -7,9 +7,11 @@ import { Server, Socket } from 'socket.io';
 @Processor('sendNotif',{concurrency:3})
 export class QueueService extends WorkerHost {
     @WebSocketServer() server: Socket;
-   async process(job: Job, token?: string): Promise<void> {
+    service: any;
+   async process(job: Job, token?: string): Promise<any> {
+        console.log(job);
         
     this.server.emit('new_message',job.data)
-     
+    return true
    }
 }

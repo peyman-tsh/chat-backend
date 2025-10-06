@@ -30,7 +30,7 @@ export class User {
   role: String;
 
   @ApiProperty({ example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...', description: 'User refresh token' })
-  @Prop({unique: true})
+  @Prop()
   refreshToken: String;
 }
 
