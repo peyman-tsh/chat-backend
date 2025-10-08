@@ -1,6 +1,5 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import * as Cors from 'cors'
 import { AppModule } from './app.module';
 import helmet from 'helmet';
 import { MongooseExceptionFilter } from './common/excption.filter';
@@ -16,12 +15,13 @@ async function bootstrap() {
     .setVersion('1.0')
     .addTag('users')
     .addTag('chat')
+    .addTag('Wallet')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, documentFactory);
   app.use(helmet());
   app.enableCors()
-  app.useGlobalFilters(new MongooseExceptionFilter())
+  // app.useGlobalFilters(new MongooseExceptionFilter())
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

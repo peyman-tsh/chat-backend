@@ -12,7 +12,8 @@ import { ChatModule } from './chat/chat.module';
 import { RateLimitMiddleware } from './rateLimit/middlware/rate.limit.middlware';
 import { RateLimitModule } from './rateLimit/rate.limit.module';
 import { RateLimitService } from './rateLimit/rate.limit.service';
-import { BullModule } from '@nestjs/bullmq';
+import { FactorModule } from './factor/factor.module';
+import { WalletModule } from './wallet/wallet.module';
 
 @Module({
   imports: [ConfigModule.forRoot({isGlobal:true}),
@@ -49,6 +50,8 @@ import { BullModule } from '@nestjs/bullmq';
     UserModule,
     ChatModule,
     RateLimitModule,
+    FactorModule,
+    WalletModule
   ],
   controllers: [],
   providers: [RateLimitService],

@@ -48,6 +48,7 @@ export class MongooseExceptionFilter implements ExceptionFilter {
         return response.status(status).json({ statusCode: status, error: 'Not Found', message });
       }
 
+      
       return response.status(status).json({ statusCode: status, error: 'Internal Server Error', message: exception.message || message });
     }
   }
