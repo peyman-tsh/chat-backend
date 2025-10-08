@@ -271,4 +271,43 @@ async sendData() {
 
   return response.data;
 }
+
+async commitTransaction(){
+
+        const dataToSign = {
+  userUniqueId: 'IRC-TEST',
+  serviceId:"IRC-TEST",
+  sequence_id: 1,
+  action: 'commit',
+  data: {
+    transaction_phrase: 'Ve/numQegkB+ahOQGvmQ+77lAEGdYWS3yUZPZrYJJnw=',
+    unique_id:"IRC-TEST",
+    sequence_id: 1,
+  },
+  time: '2022-11-15T08:30:00Z',
+};
+    const privateKeyPem = fs.readFileSync('./src/wallet/private_key.pem', 'utf8');
+      const signer = crypto.createSign('RSA-SHA256');
+  signer.update(JSON.stringify(dataToSign));
+  signer.end();
+          const signatureBase64 = signer.sign(
+    { key: privateKeyPem, passphrase: 'wallet_password' },
+    'base64'
+  );
+  const payload=signatureBase64
+  const finalldata={...dataToSign ,payload }
+ const response = await firstValueFrom(
+    this.httpService.post('https://main.pws.plzdev.ir/action',finalldata, {
+      headers: { 'Content-Type': 'application/json' },
+      auth: {
+        username: 'test-developers', // یوزرنیم ولت
+        password: '237v3YZv7gqGt4E6' // پسورد ولت
+      }
+    })
+  );
+
+  return response.data;
+}
+
+
 }

@@ -73,4 +73,10 @@ export class WalletController {
     const postWallet=await this.transferWalletService.sendData();
     return postWallet
   }
+
+  @Post('/commit')
+  async transactionCommit(){
+   const result=await this.transferWalletService.commitTransaction();
+   return result
+  }
 }
